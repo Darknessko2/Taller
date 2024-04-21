@@ -8,28 +8,27 @@ public class Cliente {
     private String telefono;
 
     private static final String ER_NOMBRE = "^[a-zA-Z]+ [a-zA-Z]+$"; // nombre que solo permite letra y solo un espacio disponible
-    private static final String ER_DNI = "^[0-9]{8}[a-zA-Z]{1}$"; // dni con 8 numeros y la ultima una letra
+    private static final String ER_DNI = "^[0-9]{8}[a-zA-Z]$"; // dni con 8 numeros y la ultima una letra
     private static final String ER_TELEFONO = "^[0-9]{9}$"; // numero de 9 digitos
 
-    public Cliente(String nombre, String dni, String telefono) {
+    public Cliente(String nombre, String dni, String telefono){
         try {
             setNombre(nombre);
             setDni(dni);
             setTelefono(telefono);
-        }catch (IllegalArgumentException e){
-            System.out.println("Los parametros introducidos no son correctos");
+        }catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }catch (Exception e){
-            System.out.println("Ha habido un error");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
-    public Cliente Cliente(Cliente cliente){ // factory method
-        String nombreCompleto = nombreFormato(cliente.getNombre());
-        // cambio de formato del nombre
-
-        return new Cliente(cliente.getNombre(),cliente.getDni(),cliente.getTelefono());
+    public Cliente(Cliente cliente){ // factory method
+        this.nombre = cliente.getNombre();
+        this.dni = cliente.getDni();
+        this.telefono = cliente.getTelefono();
     }
-    private boolean comprobarLetraDni(String dniCliente){
+    private boolean comprobarLetraDni(String dniCliente){ // separa
         int numeros = Integer.parseInt(dniCliente.substring(0,dniCliente.length() -1));
         String letraDni = Character.toString(dniCliente.charAt(dniCliente.length() -1));
 
@@ -47,17 +46,17 @@ public class Cliente {
             nombreCompleto[i] = nombreCompleto[i].substring(0,1).toUpperCase() +
                                 nombreCompleto[i].substring(1).toLowerCase();
         }
-        return nombreCompleto.toString();
+        return String.join(" ",nombreCompleto);
     }
 
-    public void setNombre(String nombre) throws IllegalArgumentException{
+    public void setNombre(String nombre){
         if (nombre.matches(ER_NOMBRE))
             this.nombre = nombreFormato(nombre); // si el nombre cumple con los requisitos se formatea de acorde a los requisitos
         else
             throw new IllegalArgumentException("El formato del nombre no es correcto");
     }
 
-    private void setDni(String dni) throws IllegalArgumentException {
+    private void setDni(String dni){
         if (dni.matches(ER_DNI)) {
 
             if (comprobarLetraDni(dni)) // se comprueba si la letra coincide
@@ -75,6 +74,12 @@ public class Cliente {
         else
             throw new IllegalArgumentException("El formato del telefono no es el correcto");
     }
+    public static Cliente get(String dni){
+        if (!dni.matches(ER_DNI))
+            throw new IllegalArgumentException("Matricula no valida (get)");
+
+        return new Cliente("gerson luque",dni,"625085332");
+    }
 
     public String getNombre() {
         return nombre;
@@ -87,8 +92,6 @@ public class Cliente {
     public String getTelefono() {
         return telefono;
     }
-
-
 
     // LOS CLIENTES SON IGUALES SI TIENEN EL MISMO DNI (hashcode y equals)
     @Override

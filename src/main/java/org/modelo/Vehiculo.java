@@ -23,16 +23,13 @@ public record Vehiculo (String marca, String modelo, String matricula){
         if (!matricula.matches(ER_MATRICULA))
             throw new IllegalArgumentException("La matricula "+matricula+" no es valida");
     }
-//    public static Vehiculo get(String matricula){
-//        try {
-//            if (!matricula.matches(ER_MATRICULA))
-//                throw new IllegalArgumentException("Matricula no valida");
-//
-//        }catch (IllegalArgumentException e){
-//            System.out.println(e.getMessage());
-//        }
-//    }
 
+    public static Vehiculo get(String matricula){
+        if (!matricula.matches(ER_MATRICULA))
+            throw new IllegalArgumentException("Matricula no valida (get)");
+
+        return new Vehiculo("seat", "a", matricula);
+    }
 
     @Override
     public boolean equals(Object object) {
