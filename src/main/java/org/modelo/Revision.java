@@ -14,7 +14,7 @@ public class Revision {
     private static final float PRECIO_HORA = 30;// precio hora empleadas en la revision
     private static final float PRECIO_DIA = 10; // precio por dia que pase el vehiculo
     private static final float PRECIO_MATERIAL = 0; // todo preguntar
-    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd MM yyyy");
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a");
     // todo preguntar el formato fecha y precio material
 
 
@@ -40,6 +40,7 @@ public class Revision {
             throw new IllegalArgumentException("La fecha de inicio no puede ser posterior al dia de hoy");
         else
             this.fechaInicio = fechaInicio;
+
     }
     private void setFechaFin(LocalDate fechaFin){
 
