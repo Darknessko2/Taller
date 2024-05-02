@@ -20,7 +20,7 @@ public class Clientes {
             clientes.add(cliente);
         }
     }
-    public boolean modificar(Cliente cliente, String nombre, String telefono) throws IllegalArgumentException{ // todo preguntar si es mejor separar el metodo en dos
+    public boolean modificar(Cliente cliente, String nombre, String telefono){ // todo preguntar si es mejor separar el metodo en dos
         boolean esModificado = false;
 
         try {

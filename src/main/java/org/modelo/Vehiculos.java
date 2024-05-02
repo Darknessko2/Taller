@@ -11,8 +11,8 @@ public class Vehiculos {
     public Vehiculos(){
         vehiculos = new HashSet<>();
     }
-    public List<Vehiculo> get(){ // todo es mejor un set o un list
-        return new ArrayList<>(vehiculos);
+    public Set<Vehiculo> get(){ // todo es mejor un set o un list
+        return new HashSet<>(vehiculos);
     }
     public void insertar(Vehiculo vehiculo){
         if (vehiculo != null) {

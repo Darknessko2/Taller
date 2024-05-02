@@ -1,10 +1,10 @@
 package org.modelo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Revisiones {
@@ -27,23 +27,29 @@ public class Revisiones {
                 .collect(Collectors.toCollection(() -> new HashSet<>()));
     }
     public void insertar(Revision revision){
-        if (revision != null)
-            listaRevisiones.add(revision);
+        try {
+            if (revision != null) {
+                comprobarRevision(revision.getCliente(),revision.getVehiculo(),revision.getFechaInicio());
+                listaRevisiones.add(revision);
+            }
+        }catch (IllegalArgumentException e ){
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
-    private void comprobarRevision(Cliente cliente, Vehiculo vehiculo, LocalDate fechaRevision){ //todo
+    // al ejecutar este metodo comprobara que las revisiones tanto por vehiculo y cliente
+    // esten de manerar correcta si no lanzara un excepcion que se podra controlar despues
+    private void comprobarRevision(Cliente cliente, Vehiculo vehiculo, LocalDate fechaRevision){
+        List<Revision> revisiones = new ArrayList<>();
+        revisiones.addAll(get(cliente));
+        revisiones.addAll(get(vehiculo));
 
-        Consumer<Revision> check = rev -> {
+        for (Revision rev : revisiones){
             if (rev.estaCerrada()) {
                 if (rev.getFechaFin().isAfter(fechaRevision))
                     throw new IllegalArgumentException("La fecha fin es superior a la fecha de revision del cliente"+rev.getCliente().getDni());
-
             }else
                 throw new IllegalArgumentException("La revision del cliente "+rev.getCliente().getDni()+" no esta cerrada");
-        };
-
-        get(cliente).stream().forEach(check);
-        get(vehiculo).stream().forEach(check);
-
+        }
     }
     private Revision getRevision(Revision revision){
         if (revision == null)
@@ -62,6 +68,14 @@ public class Revisiones {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
+    public void anadirHoras(Revision revision,int horas){
+        try {
+            getRevision(revision).anadirHoras(horas);
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
     public void cerrar(Revision revision, LocalDate fechaFin){
         try {
             getRevision(revision).cerrar(fechaFin);
@@ -69,7 +83,7 @@ public class Revisiones {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
-    public Revision buscar(Revision revision){ // todo preguntar la diferencia entre buscar y getRevision
+    public Revision buscar(Revision revision){
         return listaRevisiones.stream()
                 .filter(r -> r.equals(revision))
                 .findFirst()
