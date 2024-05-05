@@ -16,8 +16,8 @@ public class Modelo {
         vehiculos = new Vehiculos();
         revisiones = new Revisiones();
     }
-    public String terminar(){
-        return "El modelo ha terminado";
+    public void terminar(){
+        System.out.println("el modelo ha terminado");
     }
     public void insertar(Cliente cliente){
         clientes.insertar(new Cliente(cliente));

@@ -20,27 +20,20 @@ public class Clientes {
             clientes.add(cliente);
         }
     }
-    public boolean modificar(Cliente cliente, String nombre, String telefono){ // todo preguntar si es mejor separar el metodo en dos
+
+    public boolean modificar(Cliente cliente, String nombre, String telefono) { // todo preguntar si es mejor separar el metodo en dos
         boolean esModificado = false;
 
         try {
             if (!clientes.contains(cliente))
                 throw new IllegalArgumentException("El cliente no existe");
 
-            if (nombre == null || nombre.isEmpty())
-                throw new IllegalArgumentException("El campo nombre esta vacio");
-            else
-                cliente.setNombre(nombre);
-
-            if (telefono == null || telefono.isEmpty())
-                throw new IllegalArgumentException("El campo telefono esta vacio");
-            else
-                cliente.setTelefono(telefono);
-
+            cliente.setNombre(nombre);
+            cliente.setTelefono(telefono);
             esModificado = true; // si se ha modificado los cambios retorna verdadero
-        }catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }finally {
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        } finally {
             return esModificado;
         }
     }
