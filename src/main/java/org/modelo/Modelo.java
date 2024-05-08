@@ -72,9 +72,13 @@ public class Modelo {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
-    public void borrar(Cliente cliente){
+    /*
+    A la hora de borrar clientes o vehiculos
+    se borran tanto las revisiones como vehiculo/cliente relacionados en la revision
+     */
+    public void borrar(Cliente cliente){ // se borra tambein vehiculos donde las revisiones estan asociadas al cliente
         try {
-            revisiones.get(cliente).forEach(rev ->{ // se borra vehiculos donde las revisiones estan asociadas al cliente
+            revisiones.get(cliente).forEach(rev ->{
                  vehiculos.borrar(rev.getVehiculo());
                  revisiones.borrar(rev);
                  });
@@ -108,9 +112,9 @@ public class Modelo {
     contenga nuevas instancias no una referencia de los elementos.
      */
     public Set<Cliente> getClientes(){
-        Set<Cliente> result = new HashSet<>();
-        clientes.get().forEach(cli -> result.add(new Cliente(cli)));
-        return result;
+        return clientes.get().stream()
+                .map(cli -> new Cliente(cli))
+                .collect(Collectors.toCollection(()-> new HashSet<>()));
     }
 
     public Set<Vehiculo> getVehiculos(){ // como vehiculo es un record este sera inmutable
@@ -134,5 +138,4 @@ public class Modelo {
                 .map(rev -> new Revision(rev))
                 .collect(Collectors.toCollection(() -> new HashSet<>()));
     }
-
 }

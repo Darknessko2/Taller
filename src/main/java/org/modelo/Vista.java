@@ -204,12 +204,7 @@ public class Vista {
     public void borrarCliente(){
         Consola.mostrarCabezera("Borrado de clientes");
         try {
-            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
-            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
-            LocalDate fechaInicio = Consola.leerFechaInicio();
-
-            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
-            controlador.borrar(revision);
+            controlador.borrar(Consola.leerClienteDni());
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
