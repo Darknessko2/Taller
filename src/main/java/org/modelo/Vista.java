@@ -3,7 +3,6 @@ package org.modelo;
 import java.time.LocalDate;
 
 public class Vista {
-
     private Controlador controlador;
     public void setControlador(Controlador controlador){
         if (controlador == null)
@@ -13,9 +12,9 @@ public class Vista {
     }
 
     public void comenzar(){
-        Consola.mostrarMenu();
         Opcion opcion ;
         do {
+            Consola.mostrarMenu();
             opcion = Consola.elegirOpcion();
             if (opcion != Opcion.SALIR)
                 ejecutar(opcion);
@@ -27,8 +26,32 @@ public class Vista {
     }
 
     private void ejecutar(Opcion opcion ){
-        switch (opcion){
+        try {
+            switch (opcion){
+                case INSERTAR_CLIENTE -> insertarCliente();
+                case INSERTAR_VEHICULO -> insertarVehiculo();
+                case INSERTAR_REVISION -> insertarRevision();
+                case BUSCAR_REVISION -> buscarRevision();
+                case BUSCAR_VEHICULO -> buscarVehiculo();
+                case BUSCAR_CLIENTE -> buscarCliente();
+                case MODIFICAR_CLIENTE -> modificarCliente();
+                case ANADIR_HORAS_REVISION -> anadirHoras();
+                case ANADIR_PRECIO_MATERIAL_REVISION -> anadirPrecioMaterial();
+                case CERRAR_REVISION -> cerrarRevision();
+                case BORRAR_CLIENTE -> borrarCliente();
+                case BORRAR_REVISION -> borrarRevision();
+                case BORRAR_VEHICULO -> borrarVehiculo();
+                case LISTAR_VEHICULOS -> listarVehiculos();
+                case LISTAR_CLIENTES -> listarClientes();
+                case LISTAR_REVISIONES -> listarRevisiones();
+                case LISTAR_REVISIONES_CLIENTE -> listarRevisionesCliente();
+                case LISTAR_REVISIONES_VEHICULO -> listarRevisionesVehiculo();
+                case SALIR -> salir();
+            }
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
         }
+
     }
 
     private void insertarCliente(){
@@ -51,25 +74,34 @@ public class Vista {
         }
     }
 
-    private void insertarRevision(){
+    private void insertarRevision() { // todo preguntar
         Consola.mostrarCabezera("Nuevo vehiculo");
         try {
-            Revision revision = Consola.leerRevision();
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
             controlador.insertar(revision);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    private void buscarCliente(){
+    private void buscarCliente() {
         Consola.mostrarCabezera("Buscador de clientes");
-        Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+        try {
+            Cliente buscado = Consola.leerClienteDni();
+            Cliente cliente = controlador.buscar(buscado);
 
-        if (cliente != null){
+            if (cliente == null)
+                throw new IllegalArgumentException("El cliente no ha sido encontrado");
+
             System.out.println("Informacion del cliente");
             System.out.println(cliente);
-        }else
-            System.out.println("El cliente no ha sido encontrado");
+
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     private void buscarVehiculo(){
@@ -80,30 +112,58 @@ public class Vista {
             System.out.println("Informacion del vehiculo");
             System.out.println(vehiculo);
         }else
-            System.out.println("El vehiculo no ha sido encontrado");
+            throw new IllegalArgumentException("El vehiculo no ha sido encontrado");
     }
 
-    private void buscarRevision(){ // todo preguntar
+    private void buscarRevision() { // todo preguntar
+        Consola.mostrarCabezera("Buscador de revisiones");
+
+        try {
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
+            Revision encontrada = controlador.buscar(revision);
+
+            if (encontrada != null)
+                System.out.println(encontrada);
+            else
+                throw new IllegalArgumentException("Revision no encontrada");
+
+        }catch (IllegalArgumentException e ){
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     private void modificarCliente() {
+        Consola.mostrarCabezera("Modificacion del cliente");
+
         Cliente buscado = Consola.leerClienteDni();
         Cliente cliente = controlador.buscar(buscado);
 
-        System.out.println(cliente);
+        if (cliente != null)
+            System.out.println(cliente);
+
         String nombre = Consola.leerNuevoNombre();
         String telefono = Consola.leerNuevoTelefono();
-        boolean modificado = controlador.modificar(cliente, nombre, telefono);
 
-        if (modificado)
-            System.out.println("El cliente ha sido modificado");
-        else
-            System.out.println("No se ha modificado el cliente");
+        try {
+            controlador.modificar(cliente, nombre, telefono);
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     public void anadirHoras(){
+        Consola.mostrarCabezera("Agregar horas");
         try {
-            Revision revision = Consola.leerRevision();
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
+            Revision encontrada = controlador.buscar(revision);
             int horas = Consola.leerHoras();
             controlador.anadirHoras(revision,horas);
         }catch (IllegalArgumentException e){
@@ -112,8 +172,13 @@ public class Vista {
     }
 
     public void anadirPrecioMaterial(){
+        Consola.mostrarCabezera("Agregar precio material");
         try {
-            Revision revision = Consola.leerRevision();
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
             float precio = Consola.leerPrecioMaterial();
             controlador.anadirPrecioMaterial(revision,precio);
         }catch (IllegalArgumentException e){
@@ -122,8 +187,13 @@ public class Vista {
     }
 
     public void cerrarRevision(){
+        Consola.mostrarCabezera("Cerrar revisiones");
         try {
-            Revision revision = Consola.leerRevision();
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
             LocalDate fechaFin = Consola.leerFechaCierre();
             controlador.cerrar(revision,fechaFin);
         }catch (IllegalArgumentException e){
@@ -132,14 +202,21 @@ public class Vista {
     }
 
     public void borrarCliente(){
+        Consola.mostrarCabezera("Borrado de clientes");
         try {
-            controlador.borrar(Consola.leerClienteDni());
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
+            controlador.borrar(revision);
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
     public void borrarVehiculo(){
+        Consola.mostrarCabezera("Borrado de vehiculos");
         try {
             controlador.borrar(Consola.leerVehiculoMatricula());
         }catch (IllegalArgumentException e){
@@ -148,23 +225,39 @@ public class Vista {
     }
 
     public void borrarRevision(){
+        Consola.mostrarCabezera("Borrado de revisiones");
         try {
-            controlador.borrar(Consola.leerRevision());
+
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
     private void listarClientes(){
+        Consola.mostrarCabezera("Listado de clientes");
         controlador.getClientes().forEach(System.out::println);
     }
 
     private void listarVehiculos(){
+        Consola.mostrarCabezera("Listado de vehiculos");
         controlador.getVehiculos().forEach(System.out::println);
     }
 
     private void listarRevisiones(){
+        Consola.mostrarCabezera("Listado de revisiones");
         controlador.getRevisiones().forEach(System.out::println);
+    }
+
+    private void listarRevisionesCliente(){
+        Consola.mostrarCabezera("Listado de revisiones del cliente");
+        Cliente cliente = Consola.leerClienteDni();
+        controlador.getRevisiones(cliente).forEach(System.out::println);
+    }
+
+    private void listarRevisionesVehiculo(){
+        Consola.mostrarCabezera("Listado de revisiones del vehiculo");
+        Vehiculo vehiculo = Consola.leerVehiculoMatricula();
+        controlador.getRevisiones(vehiculo).forEach(System.out::println);
     }
 
     private void salir(){

@@ -76,7 +76,7 @@ public class Cliente {
     }
     public static Cliente get(String dni){
         if (!dni.matches(ER_DNI))
-            throw new IllegalArgumentException("Matricula no valida (get)");
+            throw new IllegalArgumentException("El formato del dni no es correcto");
 
         return new Cliente("gerson luque",dni,"625085332");
     }

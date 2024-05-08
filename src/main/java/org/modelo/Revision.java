@@ -14,10 +14,7 @@ public class Revision {
     private static final float PRECIO_HORA = 30;// precio hora empleadas en la revision
     private static final float PRECIO_DIA = 10; // precio por dia que pase el vehiculo
     private static final float PRECIO_MATERIAL = 0; // todo preguntar
-    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a");
-
-    // todo preguntar el formato fecha y precio material
-
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Revision(LocalDate fechaInicio, Cliente cliente, Vehiculo vehiculo) {
         try {
@@ -30,10 +27,13 @@ public class Revision {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
-    public Revision(Revision revision){
+    public Revision(Revision revision){ // contructor copia
         this.fechaInicio = revision.getFechaInicio();
-        this.cliente = new Cliente(revision.getCliente()); // se crea una copia del cliente
-        this.vehiculo = revision.getVehiculo();
+        this.cliente = new Cliente(revision.getCliente()); // copia del cliente
+        this.vehiculo = revision.getVehiculo(); // vehiculo es inmutable al ser record
+        this.horas = revision.horas;
+        this.precioMaterial = revision.precioMaterial;
+        this.fechaFin = revision.getFechaFin();
     }
 
     private void setFechaInicio(LocalDate fechaInicio) {
@@ -55,7 +55,7 @@ public class Revision {
             this.fechaFin = fechaFin;
     }
 
-    public void anadirHoras(int horas){ // todo preguntar el control de datos
+    public void anadirHoras(int horas){
         if (horas <= 0)
             throw new IllegalArgumentException("El numero de horas agregar tiene que se positivo");
         else if (estaCerrada())
@@ -93,10 +93,16 @@ public class Revision {
         return (horas * PRECIO_HORA) + (getDias() * PRECIO_DIA);
     }
     private void setVehiculo(Vehiculo vehiculo){
-        this.vehiculo = vehiculo;
+        if (vehiculo != null){
+            this.vehiculo = vehiculo;
+        }else
+            throw new IllegalArgumentException("El vehiculo no existe");
     }
     private void setCliente(Cliente cliente){
-        this.cliente = cliente;
+        if (cliente != null)
+            this.cliente = cliente;
+        else
+            throw new IllegalArgumentException("El cliente no existe");
     }
 
     public LocalDate getFechaInicio() {

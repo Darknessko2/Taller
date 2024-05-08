@@ -18,11 +18,22 @@ public class Controlador {
         this.vista = vista;
         this.modelo = modelo;
 
-        vista.setControlador(this);
+        vista.setControlador(this); // la vista es inicializada con el controlador recien creado
     }
 
     public void comenzar(){
         modelo.comenzar();
+        Cliente cliente = new Cliente("gerson luque","51703435x","640231091");
+        Vehiculo vehiculo = new Vehiculo("seat","ibiza","2107djs");
+        insertar(cliente);
+        insertar(vehiculo);
+
+        LocalDate fechaInicio = LocalDate.of(2001,10,10);
+        Revision revision = new Revision(fechaInicio,cliente,vehiculo);
+        insertar(revision);
+
+        anadirPrecioMaterial(revision,10);
+
         vista.comenzar();
     }
     public void terminar(){
@@ -55,7 +66,12 @@ public class Controlador {
     }
 
     public boolean modificar(Cliente cliente,String nombre ,String telefono){
-        return modelo.modificar(cliente,nombre,telefono);
+        try {
+            modelo.modificar(cliente,nombre,telefono);
+            return true;
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     public void anadirHoras(Revision revision,int horas){

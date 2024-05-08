@@ -16,8 +16,7 @@ public class Vehiculos {
     }
     public void insertar(Vehiculo vehiculo){
         if (vehiculo != null) {
-            if (!vehiculos.contains(vehiculo))
-                vehiculos.add(vehiculo);
+            vehiculos.add(vehiculo);
         }
     }
     public Vehiculo buscar(Vehiculo vehiculo){

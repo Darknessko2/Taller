@@ -2,7 +2,6 @@ package org.modelo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -118,7 +117,7 @@ public class Consola {
         }
     }
 
-    public static Revision leerRevision(){ // todo preguntar
+    public static Revision leerRevision(){ // todo preguntar si en una revision se crea
         try {
             Vehiculo vehiculo = leerVehiculo();
             Cliente cliente = leerCliente();
@@ -139,6 +138,9 @@ public class Consola {
     }
 
     public static LocalDate leerFechaCierre(){
-        return leerFecha("Introduce la fecha de cierre");
+        return leerFecha("Introduce la fecha de cierre \nFormato -> "+CADENA_FORMATO_FECHA);
+    }
+    public static LocalDate leerFechaInicio(){
+        return leerFecha("Introduce la fecha de inicio \nFormato -> "+CADENA_FORMATO_FECHA);
     }
 }

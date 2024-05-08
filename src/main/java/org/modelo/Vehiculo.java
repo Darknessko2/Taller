@@ -26,7 +26,7 @@ public record Vehiculo (String marca, String modelo, String matricula){
 
     public static Vehiculo get(String matricula){
         if (!matricula.matches(ER_MATRICULA))
-            throw new IllegalArgumentException("Matricula no valida (get)");
+            throw new IllegalArgumentException("Matricula con formator no valido");
 
         return new Vehiculo("seat", "a", matricula);
     }

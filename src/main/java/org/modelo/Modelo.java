@@ -3,6 +3,7 @@ package org.modelo;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class Modelo {
@@ -15,9 +16,10 @@ public class Modelo {
         clientes = new Clientes();
         vehiculos = new Vehiculos();
         revisiones = new Revisiones();
+
     }
     public void terminar(){
-        System.out.println("el modelo ha terminado");
+        System.out.println("El modelo ha terminado");
     }
     public void insertar(Cliente cliente){
         clientes.insertar(new Cliente(cliente));
@@ -42,7 +44,12 @@ public class Modelo {
         return (resultado != null) ? new Revision(resultado) : null;
     }
     public boolean modificar(Cliente cliente,String nombre,String telefono){
-        return clientes.modificar(cliente,nombre,telefono);
+        try {
+            clientes.modificar(cliente,nombre,telefono);
+            return true;
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
     public void anadirHoras(Revision revision,int horas){
         try {

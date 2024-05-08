@@ -55,6 +55,6 @@ public enum Opcion {
 
     @Override
     public String toString() {
-        return numeroOpcion +". "+ mensaje;
+        return String.format("%02d",numeroOpcion) +". "+ mensaje;
     }
 }

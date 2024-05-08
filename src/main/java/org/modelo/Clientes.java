@@ -22,19 +22,14 @@ public class Clientes {
     }
 
     public boolean modificar(Cliente cliente, String nombre, String telefono) { // todo preguntar si es mejor separar el metodo en dos
-        boolean esModificado = false;
-
         try {
             if (!clientes.contains(cliente))
                 throw new IllegalArgumentException("El cliente no existe");
-
             cliente.setNombre(nombre);
             cliente.setTelefono(telefono);
-            esModificado = true; // si se ha modificado los cambios retorna verdadero
+            return true;
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            return esModificado;
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
     public Cliente buscar(Cliente cliente){
@@ -44,7 +39,7 @@ public class Clientes {
                 .orElse(null);
     }
     public void borrar(Cliente cliente){
-        if(clientes.remove(cliente))
+        if(!clientes.remove(cliente))
             throw new IllegalArgumentException("El cliente no se ha borrado porque no esta en la lista");
     }
 
