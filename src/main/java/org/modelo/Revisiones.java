@@ -33,7 +33,7 @@ public class Revisiones {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
-    // al ejecutar este metodo comprobara que las revisiones tanto por vehiculo y cliente
+    // comprobara que las revisiones tanto por vehiculo como por cliente
     // esten de manerar correcta si no lanzara un excepcion que se podra controlar despues
     private void comprobarRevision(Cliente cliente, Vehiculo vehiculo, LocalDate fechaRevision){
         List<Revision> revisiones = new ArrayList<>();

@@ -115,27 +115,6 @@ public class Vista {
             throw new IllegalArgumentException("El vehiculo no ha sido encontrado");
     }
 
-    private void buscarRevision() { // todo preguntar
-        Consola.mostrarCabezera("Buscador de revisiones");
-
-        try {
-            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
-            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
-            LocalDate fechaInicio = Consola.leerFechaInicio();
-
-            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
-            Revision encontrada = controlador.buscar(revision);
-
-            if (encontrada != null)
-                System.out.println(encontrada);
-            else
-                throw new IllegalArgumentException("Revision no encontrada");
-
-        }catch (IllegalArgumentException e ){
-            throw new IllegalArgumentException(e.getMessage());
-        }
-    }
-
     private void modificarCliente() {
         Consola.mostrarCabezera("Modificacion del cliente");
 
@@ -151,6 +130,29 @@ public class Vista {
         try {
             controlador.modificar(cliente, nombre, telefono);
         }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+
+    private void buscarRevision() {
+        Consola.mostrarCabezera("Buscador de revisiones");
+
+        //Para buscar un revision hay encontrar el cliente,vehiculo y fecha de inicio
+        try {
+            Cliente cliente = controlador.buscar(Consola.leerClienteDni());
+            Vehiculo vehiculo = controlador.buscar(Consola.leerVehiculoMatricula());
+            LocalDate fechaInicio = Consola.leerFechaInicio();
+
+            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
+            Revision encontrada = controlador.buscar(revision);
+
+            if (encontrada != null)
+                System.out.println(encontrada);
+            else
+                throw new IllegalArgumentException("Revision no encontrada");
+
+        }catch (IllegalArgumentException e ){
             throw new IllegalArgumentException(e.getMessage());
         }
     }

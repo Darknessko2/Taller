@@ -18,17 +18,15 @@ public class Cliente {
             setTelefono(telefono);
         }catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
         }
     }
 
-    public Cliente(Cliente cliente){ // factory method
+    public Cliente(Cliente cliente){
         this.nombre = cliente.getNombre();
         this.dni = cliente.getDni();
         this.telefono = cliente.getTelefono();
     }
-    private boolean comprobarLetraDni(String dniCliente){ // separa
+    private boolean comprobarLetraDni(String dniCliente){
         int numeros = Integer.parseInt(dniCliente.substring(0,dniCliente.length() -1));
         String letraDni = Character.toString(dniCliente.charAt(dniCliente.length() -1));
 
@@ -37,6 +35,7 @@ public class Cliente {
         int posicion = numeros % 23 ;
 
         return conjuntoLetras[posicion].equalsIgnoreCase(letraDni);
+        // si la letra coincide con el letra de la posicion es correcto
     }
 
 

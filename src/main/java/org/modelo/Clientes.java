@@ -21,10 +21,11 @@ public class Clientes {
         }
     }
 
-    public boolean modificar(Cliente cliente, String nombre, String telefono) { // todo preguntar si es mejor separar el metodo en dos
+    public boolean modificar(Cliente cliente, String nombre, String telefono) {
         try {
             if (!clientes.contains(cliente))
                 throw new IllegalArgumentException("El cliente no existe");
+
             cliente.setNombre(nombre);
             cliente.setTelefono(telefono);
             return true;

@@ -23,17 +23,6 @@ public class Controlador {
 
     public void comenzar(){
         modelo.comenzar();
-        Cliente cliente = new Cliente("gerson luque","51703435x","640231091");
-        Vehiculo vehiculo = new Vehiculo("seat","ibiza","2107djs");
-        insertar(cliente);
-        insertar(vehiculo);
-
-        LocalDate fechaInicio = LocalDate.of(2001,10,10);
-        Revision revision = new Revision(fechaInicio,cliente,vehiculo);
-        insertar(revision);
-
-        anadirPrecioMaterial(revision,10);
-
         vista.comenzar();
     }
     public void terminar(){

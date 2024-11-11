@@ -21,13 +21,17 @@ public class Modelo {
     public void terminar(){
         System.out.println("El modelo ha terminado");
     }
+    /*
+    insertaremos nuevas instancias utilizando los constructores copia (exceptuando
+    Vehiculo ya que es un registro y, por tanto, inmutable)
+     */
     public void insertar(Cliente cliente){
         clientes.insertar(new Cliente(cliente));
     }
     public void insertar(Vehiculo vehiculo){ // al ser un record es inmutable
         vehiculos.insertar(vehiculo);
     }
-    public void insertar(Revision revision){ // todo preguntar
+    public void insertar(Revision revision){
         Cliente cliente = revision.getCliente();
         Vehiculo vehiculo = revision.getVehiculo();
         revisiones.insertar(new Revision(revision.getFechaInicio(), cliente, vehiculo));

@@ -7,8 +7,9 @@ import java.util.Scanner;
 
 public class Consola {
     private final static String CADENA_FORMATO_FECHA = "dd/MM/yyyy";
-
     private static Scanner sc = new Scanner(System.in);
+
+    private Consola(){}; // constructor privado para evitar instancias
     public static void mostrarCabezera(String mensaje){
         System.out.println(mensaje);
         System.out.println("-".repeat(mensaje.length()));
@@ -22,15 +23,14 @@ public class Consola {
         while (true){
             try {
                 int numero = leerEntero("Introduce el numero de la opcion");
-                Opcion opcion =  Opcion.get(numero);
-                return opcion;
+                return Opcion.get(numero);
             }catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private static float leerReal(String mensaje) {
+    public static float leerFloat(String mensaje) {
         System.out.println(mensaje);
         while (!sc.hasNextFloat()) {
             System.out.println("Ingresa un valor valido");
@@ -38,7 +38,7 @@ public class Consola {
         }
         return sc.nextFloat();
     }
-    private static int leerEntero(String mensaje){
+    public static int leerEntero(String mensaje){
         System.out.println(mensaje);
         while (!sc.hasNextInt()) {
             System.out.println("Ingresa un valor valido");
@@ -49,17 +49,16 @@ public class Consola {
         return numero;
     }
 
-    private static String leerCadena(String mensaje){
+    public static String leerCadena(String mensaje){
         System.out.println(mensaje);
         return sc.nextLine();
     }
-    private static LocalDate leerFecha(String mensaje){
+    public static LocalDate leerFecha(String mensaje){
         System.out.println(mensaje);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(CADENA_FORMATO_FECHA);
         while (true){
             try {
-                LocalDate fecha = LocalDate.parse(sc.nextLine(),formatter);
-                return fecha;
+                return LocalDate.parse(sc.nextLine(),formatter);
             }catch (DateTimeParseException e ){
                 System.out.println("El formato del fecha no es correcto");
                 System.out.println("Formato correcto : "+CADENA_FORMATO_FECHA);
@@ -72,8 +71,7 @@ public class Consola {
         String dni = leerCadena("Introduce el dni");
         String telefono = leerCadena("Introduce el telefono del cliente");
         try {
-            Cliente cliente = new Cliente(nombre,dni,telefono);
-            return cliente;
+            return new Cliente(nombre,dni,telefono);
         }catch (IllegalArgumentException e ){
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -81,8 +79,7 @@ public class Consola {
     public static Cliente leerClienteDni(){
         String dni = leerCadena("Introduce el dni del cliente");
         try {
-           Cliente cliente = Cliente.get(dni);
-           return cliente;
+            return Cliente.get(dni);
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -101,8 +98,7 @@ public class Consola {
         String modelo = leerCadena("Introduce el modelo");
 
         try {
-            Vehiculo vehiculo = new Vehiculo(marca,modelo,matricula);
-            return vehiculo;
+            return new Vehiculo(marca,modelo,matricula);
         }catch (IllegalArgumentException e ){
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -110,20 +106,18 @@ public class Consola {
 
     public static Vehiculo leerVehiculoMatricula(){
         try {
-            Vehiculo vehiculo = Vehiculo.get(leerCadena("Introduce la matricula"));
-            return vehiculo;
+            return Vehiculo.get(leerCadena("Introduce la matricula"));
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    public static Revision leerRevision(){ // todo preguntar si en una revision se crea
+    public static Revision leerRevision(){
         try {
             Vehiculo vehiculo = leerVehiculo();
             Cliente cliente = leerCliente();
             LocalDate fechaInicio = leerFecha("Introduce la fecha de inicio de revision");
-            Revision revision = new Revision(fechaInicio,cliente,vehiculo);
-            return revision;
+            return new Revision(fechaInicio,cliente,vehiculo);
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -134,7 +128,7 @@ public class Consola {
     }
 
     public static float leerPrecioMaterial(){
-        return leerReal("Introduce el costo de los materiales");
+        return leerFloat("Introduce el costo de los materiales");
     }
 
     public static LocalDate leerFechaCierre(){
